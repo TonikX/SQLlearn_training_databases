@@ -1,5 +1,5 @@
 # SQLlearn_training_databases
-Набор баз данных для сервиса SQLlearn
+Набор баз данных для сервиса SQLlearn (MySQL)
 
 ## Темы
 
