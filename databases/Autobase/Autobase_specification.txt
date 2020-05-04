@@ -22,7 +22,7 @@ car - машина
 
 fuel - топливо
 	id_fuel(PK) - идентификатор топлива
-	fuel_brand_ - марка топлива
+	fuel_brand - марка топлива
 	kind - вид топлива
 
 refueling - дозаправка

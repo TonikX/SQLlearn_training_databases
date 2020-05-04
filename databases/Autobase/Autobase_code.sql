@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS `fuel`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fuel` (
-  `fuel_brand_` varchar(20) DEFAULT NULL,
+  `fuel_brand` varchar(20) DEFAULT NULL,
   `kind` varchar(20) NOT NULL,
   `id_fuel` int NOT NULL,
   PRIMARY KEY (`id_fuel`)
