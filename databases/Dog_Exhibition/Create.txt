@@ -1,0 +1,128 @@
+create database Dog_Exhibition;
+
+use Dog_Exhibition;
+
+CREATE TABLE Sponsor (
+id_spnr int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_spnr varchar(30) NOT NULL,
+phone_spnr varchar(20) NOT NULL,
+email_spnr varchar(30)
+);
+
+CREATE TABLE Exhibition (
+id_exh int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_exh varchar(30) NOT NULL,
+date_beg timestamp NOT NULL,
+date_end timestamp NOT NULL,
+address_exh varchar(40) NOT NULL,
+type_exh varchar(20) NOT NULL
+);
+
+CREATE TABLE Owner (
+id_own int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+passport_own varchar(20) NOT NULL UNIQUE,
+name_own varchar(60) NOT NULL,
+email_own varchar(30),
+phone_own varchar(20) NOT NULL
+);
+
+CREATE TABLE Club (
+id_club int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_club varchar(30) NOT NULL,
+phone_club varchar(20) NOT NULL,
+email_club varchar(30)
+);
+
+CREATE TABLE Sponsorship (
+id_spns int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+num_cont varchar(20) NOT NULL,
+date_concl date NOT NULL,
+id_spnr int(5) NOT NULL,
+id_exh int(5) NOT NULL,
+FOREIGN KEY (id_spnr) REFERENCES Sponsor (id_spnr) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_exh) REFERENCES Exhibition (id_exh) ON DELETE CASCADE ON UPDATE CASCADE,
+UNIQUE (id_spnr, id_exh)
+);
+
+CREATE TABLE Schedule (
+id_sch int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+breed varchar(20) NOT NULL,
+time_perf timestamp NOT NULL,
+num_ring int(3) NOT NULL,
+id_exh int(5) NOT NULL,
+FOREIGN KEY (id_exh) REFERENCES Exhibition (id_exh) ON DELETE CASCADE ON UPDATE CASCADE,
+CHECK (num_ring > 0)
+);
+
+CREATE TABLE Dog (
+id_dog int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_dog varchar(20) NOT NULL,
+breed varchar(20) NOT NULL,
+age int(3) NOT NULL,
+class_dog varchar(20) NOT NULL,
+name_mother_dog varchar(20),
+name_father_dog varchar(20),
+num_birth_doc varchar(30) NOT NULL UNIQUE,
+date_last_vac date NOT NULL,
+id_own int(5) NOT NULL,
+id_club int(5),
+FOREIGN KEY (id_own) REFERENCES Owner (id_own) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_club) REFERENCES Club (id_club) ON DELETE CASCADE ON UPDATE CASCADE,
+CHECK ((age > 0) AND (age < 30))
+);
+
+CREATE TABLE Expert (
+id_exp int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name_exp varchar(60) NOT NULL,
+email_exp varchar(30),
+phone_exp varchar(20) NOT NULL,
+passport_exp varchar(20) NOT NULL UNIQUE,
+id_club int(5) NOT NULL,
+FOREIGN KEY (id_club) REFERENCES Club (id_club) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Dog_reg (
+id_dog_reg int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+num_part int(3) NOT NULL,
+status_part varchar(20) NOT NULL,
+date_reg_dog timestamp NOT NULL,
+status_pay varchar(20) NOT NULL,
+status_med varchar(20) NOT NULL,
+date_med date NOT NULL,
+id_dog int(5) NOT NULL,
+id_exh int(5) NOT NULL,
+FOREIGN KEY (id_dog) REFERENCES Dog (id_dog) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_exh) REFERENCES Exhibition (id_exh) ON DELETE CASCADE ON UPDATE CASCADE,
+UNIQUE (id_dog, id_exh),
+UNIQUE (num_part, id_exh)
+);
+
+CREATE TABLE Expert_reg (
+id_exp_reg int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+num_ref int(3) NOT NULL,
+status_ref varchar(20) NOT NULL,
+date_reg_exp timestamp NOT NULL,
+id_exp int(5) NOT NULL,
+id_exh int(5) NOT NULL,
+FOREIGN KEY (id_exp) REFERENCES Expert (id_exp) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_exh) REFERENCES Exhibition (id_exh) ON DELETE CASCADE ON UPDATE CASCADE,
+UNIQUE (id_exp, id_exh),
+UNIQUE (num_ref, id_exh)
+);
+
+CREATE TABLE Evaluation (
+id_evl int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id_sch int(5) NOT NULL,
+id_dog_reg int(5) NOT NULL,
+id_exp_reg int(5) NOT NULL,
+grade_1 int(3),
+grade_2 int(3),
+grade_3 int(3),
+FOREIGN KEY (id_sch) REFERENCES Schedule (id_sch) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_dog_reg) REFERENCES Dog_reg (id_dog_reg) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_exp_reg) REFERENCES Expert_reg (id_exp_reg) ON DELETE CASCADE ON UPDATE CASCADE,
+CHECK ((grade_1 >= 0) AND (grade_1 <= 10)),
+CHECK ((grade_2 >= 0) AND (grade_2 <= 10)),
+CHECK ((grade_3 >= 0) AND (grade_3 <= 10)),
+UNIQUE (id_dog_reg, id_exp_reg)
+);
